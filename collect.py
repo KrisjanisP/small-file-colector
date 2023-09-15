@@ -22,6 +22,7 @@ def collect_file_metadata(input_dir):
             # "path": full_path,
             # "size": os.path.getsize(full_path),
             "creation_date": creation_date,
+            "c_timestamp": creation_timestamp,
         }
         
         if creation_date not in metadata_by_date:
@@ -39,6 +40,12 @@ def save_metadata_to_json(metadata_by_date, tmp_dir):
                 json.dump(metadata, json_file)
                 json_file.write("\n")
 
+def save_ctimes_to_txt(metadata_by_date, tmp_dir):
+    for date, metadatas in tqdm(metadata_by_date.items(), desc="Writing TXT files"):
+        txt_file_path = os.path.join(tmp_dir, f"{date}.txt")
+        with open(txt_file_path, 'w') as txt_file:
+            for metadata in metadatas:
+                txt_file.write(f"{metadata['c_timestamp']}\n")
 
 def zip_tmp_dir(tmp_dir, output_file):
     with zipfile.ZipFile(output_file, 'w') as zipf:
@@ -53,7 +60,8 @@ def main(input_dir, output_file):
     # Create a temporary directory with a random name
     with tempfile.TemporaryDirectory(dir='/tmp') as tmp_dir:
         metadata_by_date = collect_file_metadata(input_dir)
-        save_metadata_to_json(metadata_by_date, tmp_dir)
+        save_ctimes_to_txt(metadata_by_date, tmp_dir)
+        # save_metadata_to_json(metadata_by_date, tmp_dir)
         zip_tmp_dir(tmp_dir, output_file)
         # tmp_dir will be automatically deleted after exiting the context
 
