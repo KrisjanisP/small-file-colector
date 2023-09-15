@@ -60,7 +60,10 @@ def main(input_dir, output_file):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description='Process input directory and save metadata to a .zip file.')
-    parser.add_argument('input_dir', type=str, help='Path to the input directory.')
-    parser.add_argument('output_file', type=str, help='Path to the output .zip file.')
+    
+    # Use the add_argument method to specify the expected arguments
+    parser.add_argument('-in', dest='input_dir', required=True, type=str, help='Path to the input directory.')
+    parser.add_argument('-out', dest='output_file', required=True, type=str, help='Path to the output .zip file.')
+    
     args = parser.parse_args()
     main(args.input_dir, args.output_file)
