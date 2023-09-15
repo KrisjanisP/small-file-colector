@@ -19,8 +19,8 @@ def collect_file_metadata(input_dir):
         
         metadata = {
             "filename": filepath,
-            "path": full_path,
-            "size": os.path.getsize(full_path),
+            # "path": full_path,
+            # "size": os.path.getsize(full_path),
             "creation_date": creation_date,
         }
         
